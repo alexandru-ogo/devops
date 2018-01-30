@@ -1,0 +1,73 @@
+---
+
+#---- ansible requires python2
+#---- first solution => add to the inventory file for specific group/host this => ansible_python_interpreter=/usr/bin/python3
+#---- second solution => install python2
+  # gather_facts: false
+  # pre_tasks:
+  #   - name: install python2
+  #     raw: sudo apt-get -y install python-simplejson
+
+
+- name: Install dependencies
+  apt: pkg={{ item }} state=present 
+  become: yes
+  with_items:
+   - openjdk-8-jdk
+   - git
+   - wget
+
+- name: Updating APT package cache
+  become: yes
+  action: apt update_cache=yes
+
+- name: Download jenkins repo
+  shell: wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | apt-key add -
+  become: yes
+
+- name: Add Jenkins repository
+  shell: sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ | tee /etc/apt/sources.list.d/jenkins.list' 
+  become: yes  
+
+- name: Install Jenkins
+  apt: name=jenkins state=present
+  become: true
+
+- name: Add Ansible repository
+  apt_repository: repo='ppa:ansible/ansible' update_cache=yes
+
+- name: Install ansible
+  apt: name=ansible 
+  state: latest
+  become: true
+
+- name: Add Jenkins private key
+  copy: 
+    content: "{{ private_key }}"
+    dest: /var/lib/jenkins/.ssh/jenkins_private_key 
+    owner: jenkins
+    group: jenkins
+    mode: 0600
+  no_log: true
+  become: true
+
+- name: Add host to inventory file
+  copy:
+    content: "{{ config_hosts }}"
+    dest: /etc/ansible/hosts
+    owner: jenkins
+    group: jenkins
+    mode: 0600
+  no_log: true
+  become: true
+
+
+- name: Add config file for ssh
+  copy:
+    content: "{{ config_ssh }}"
+    dest: /var/lib/jenkins/.ssh/config
+    owner: jenkins
+    group: jenkins
+    mode: 0600
+  no_log: true
+  become: true

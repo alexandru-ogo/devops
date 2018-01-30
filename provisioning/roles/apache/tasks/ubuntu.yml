@@ -1,0 +1,7 @@
+---
+
+- name: Install Apache on Ubuntu VM
+  apt: name={{ item }} state=installed update_cache=yes
+  with_items:
+      - apache2
+      - libapache2-mod-php5

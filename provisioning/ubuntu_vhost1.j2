@@ -1,0 +1,15 @@
+<VirtualHost *:80>
+    ServerName {{ var1 }}
+    ServerAlias www.{{ var1 }}
+
+    DocumentRoot /var/www/{{ var1 }}/web
+    <Directory /var/www/{{ var1 }}/web>
+        AllowOverride All
+        Order Allow,Deny
+        Allow from All
+    </Directory>
+
+    ErrorLog /var/log/apache2/{{ var1 }}_error.log
+    CustomLog /var/log/apache2/{{ var1 }}_access.log combined
+
+</VirtualHost>

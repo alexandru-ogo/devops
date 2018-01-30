@@ -1,0 +1,42 @@
+---
+ #------Ubuntu-----------#
+
+- hosts: test-servers
+  become: true
+  
+  tasks:
+   - name: Make directory for ubuntu1.com
+     file: path=/var/www/{{ var1 }}/web state=directory mode=0775
+
+   - name: Copy PHP file to VM
+     copy: src=index.php dest=/var/www/{{ var1 }}/web/index.php mode=0644
+
+   - name: Add virtual host for ubuntu1.com
+     template: src=ubuntu_vhost1.j2 dest=/etc/apache2/sites-enabled/{{ var1 }}.conf owner=root group=root mode=0644
+
+
+   - name: Make directory for ubuntu2.com
+     file: path=/var/www/{{ var2 }}/web state=directory mode=0775
+
+   - name: Copy PHP file to VM
+     copy: src=index.php dest=/var/www/{{ var2 }}/web/index.php mode=0644
+
+   - name: Add virtual host for ubuntu2.com
+     template: src=ubuntu_vhost2.j2 dest=/etc/apache2/sites-enabled/{{ var2 }}.conf owner=root group=root mode=0644
+
+   
+#--------CentOS-----------#
+
+- hosts: centos
+  become: true
+
+  tasks: 
+  - name: Copy PHP file to VM
+    copy: src=index.php dest=/var/www/html/{{ ogo1 }}/index.php mode=0664
+
+
+  - name: Copy PHP file to VM
+    copy: src=index.php dest=/var/www/html/{{ ogo2 }}/index.php mode=0664
+
+    notify:
+    - restart httpd
