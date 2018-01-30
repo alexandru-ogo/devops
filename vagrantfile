@@ -8,17 +8,14 @@ Vagrant.configure(2) do |config|
 		ubuntu.vm.network :private_network, ip: "192.168.33.151"
 		ubuntu.vm.box_check_update = false
 
-		# ubuntu.vm.provision :ansible do |ansible|
-		# 	ansible.playbook = "provisioning/playbook.yml"
-		# end
+		ubuntu.vm.provision :ansible do |ansible|
+			ansible.playbook = "provisioning/playbook.yml"
+		end
 
 		ubuntu.vm.provider "virtualbox" do |v|
 			# v.memory = 1024
 			# v.cpus = 1
 			v.name = "Ubuntu Server"
-
-			#---- Get rid of ubuntu-xenial-16.04-cloudimg-console.log ----#
-			v.customize [ "modifyvm", :id, "--uartmode1", "disconnected" ]
 		end
 	end
 
@@ -29,17 +26,11 @@ Vagrant.configure(2) do |config|
 		centos.vm.box = "centos/7"
 		centos.vm.hostname = "centos"
 		centos.vm.box_check_update = false
-
-		#ssh config
-		# centos.ssh.insert_key = false
-		# centos.ssh.private_key_path = ["keys/private", "~/.vagrant.d/insecure_private_key"]
-		# centos.vm.provision "file", source: "keys/public", destination: "~/.ssh/authorized_keys"
-
 		centos.vm.network :private_network, ip: "192.168.33.152"
 
-		# config.vm.provision :ansible do |ansible|
-		# 	ansible.playbook = "provisioning/playbook.yml"
-		# end
+		config.vm.provision :ansible do |ansible|
+			ansible.playbook = "provisioning/playbook.yml"
+		end
 
 		centos.vm.provider "virtualbox" do |v|
 			# v.memory = 1024
@@ -52,15 +43,15 @@ Vagrant.configure(2) do |config|
 ### Jenkins Server ###  
 
         config.vm.define "jenkins" do |jenkins| 
-		jenkins.vm.box = "ubuntu/trusty64"
+		jenkins.vm.box = "ubuntu/xenial64"
 		jenkins.vm.hostname = "jenkins"
 		jenkins.vm.network :private_network, ip: "192.168.33.153"
 		jenkins.vm.box_check_update = false
 
-		# jenkins.vm.network "forwarded_port", guest: 8080, host: 8080
-		# jenkins.vm.provision :ansible do |ansible|
-  #           ansible.playbook = "provisioning/playbook.yml"
-  #       end
+		jenkins.vm.network "forwarded_port", guest: 8080, host: 8080
+		jenkins.vm.provision :ansible do |ansible|
+            ansible.playbook = "provisioning/playbook.yml"
+        end
 
         jenkins.vm.provider "virtualbox" do |v|
             # v.memory = 1024

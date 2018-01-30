@@ -1,7 +1,7 @@
 ---
  #------Ubuntu-----------#
 
-- hosts: test-servers
+- hosts: ubuntu
   become: true
   
   tasks:

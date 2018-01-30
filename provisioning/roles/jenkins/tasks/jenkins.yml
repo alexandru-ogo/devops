@@ -22,12 +22,16 @@
   action: apt update_cache=yes
 
 - name: Download jenkins repo
-  shell: wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | apt-key add -
+  shell: wget -q -O - https://pkg.jenkins.io/debian/jenkins-ci.org.key | sudo apt-key add -
   become: yes
 
 - name: Add Jenkins repository
-  shell: sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ | tee /etc/apt/sources.list.d/jenkins.list' 
+  shell: sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list' 
   become: yes  
+
+- name: Updating APT package cache
+  become: yes
+  action: apt update_cache=yes
 
 - name: Install Jenkins
   apt: name=jenkins state=present
