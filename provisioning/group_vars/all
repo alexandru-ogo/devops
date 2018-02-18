@@ -1,11 +1,8 @@
 var1: ubuntu1.com
 var2: ubuntu2.com
 
-ogo1: ogorodnic1.com
-ogo2: ogorodnic2.com
-
-#ogo1: centos1.com
-#ogo2: centos2.com
+ogo1: centos1.com
+ogo2: centos2.com
 
 private_key: |
    -----BEGIN RSA PRIVATE KEY-----
