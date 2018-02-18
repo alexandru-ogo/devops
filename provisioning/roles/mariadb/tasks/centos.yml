@@ -1,15 +1,27 @@
 ---
+# - name: Install wget
+#   become: yes
+#   yum: name=wget state=present
 
-- name: Install MySQL 5.7 repo
-  yum: name=http://dev.mysql.com/get/mysql57-community-release-el7-8.noarch.rpm state=present
+# - name: Download MySQL 5.7 repo
+#   become: yes
+#   shell: rpm -ivh https://dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm
 
-- name: Install MySQL 5.7
-  yum: name={{ item }} state=present update_cache=yes
-  with_items:
-    - mysql-community-server
-    - mysql-community-client
+
+# - name: Install MySQL 5.7
+#   yum: name={{ item }} state=present update_cache=yes
+#   with_items:
+#     - mysql-community-server
+#     - mysql-community-client
     
 
-- name: Start MySQL Server and enable it
-  systemd: name=mysqld state=started enabled=yes
-  
+# - name: Start MySQL Server and enable it
+#   systemd: name=mysqld state=started enabled=yes
+#   
+- name: Install MariaDB Server
+  become: yes
+  yum: name=mariadb-server state=present
+
+- name: Start MariaDB and enabled it
+  become: yes
+  service: state=started name=mariadb  enabled=yes
