@@ -1,5 +1,5 @@
 <? php
-echo "Hello World from inside of web servers!";
+echo "Hello World de pe serverul WEB!\n";
 // echo "Acum sunt la prezentare de licenta";
 
 ?>

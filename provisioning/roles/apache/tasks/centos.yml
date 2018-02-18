@@ -9,7 +9,8 @@
 
 
 - name: Start the httpd service
-  service: name=httpd state=started enabled=yes
+  become: yes
+  service: state=started name=httpd  enabled=yes
 
 
 - name: Ensure that file are included to httpd.conf
